@@ -1,0 +1,756 @@
+.movimientos-page {
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 28px 35px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.page-header h1 {
+  margin: 5px 0 7px;
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.page-kicker {
+  display: block;
+  color: var(--blue-bright);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.movement-new-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border: 1px solid var(--border-highlight);
+  border-radius: 9px;
+  background: var(--blue-accent);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow-glow);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.movement-new-button:hover {
+  background: var(--blue-bright);
+  border-color: var(--blue-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.16);
+}
+
+.movement-summary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0 auto 22px;
+}
+
+.movement-summary > div {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--blue-card);
+  box-shadow: var(--shadow-main);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.movement-summary > div:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-highlight);
+  background: var(--blue-card-hover);
+}
+
+.movement-summary span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.movement-summary strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-primary);
+  font-size: 23px;
+}
+
+.movements-panel {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--blue-card);
+  box-shadow: var(--shadow-main);
+}
+
+.movements-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.movement-search {
+  width: 340px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.movement-search:focus-within {
+  border-color: var(--blue-bright);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+}
+
+.movement-search input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 11px;
+}
+
+.movement-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.movement-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.movement-table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.movement-table th {
+  padding: 13px 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 8px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.movement-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 10px;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movement-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.035);
+}
+
+.movement-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.movement-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 20px;
+  font-size: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.movement-entry {
+  background: var(--green-bg);
+  color: var(--green-accent);
+}
+
+.movement-transfer {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--blue-bright);
+}
+
+.movement-detail-button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.movement-detail-button:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: var(--border-highlight);
+  color: var(--blue-bright);
+  transform: translateY(-1px);
+}
+
+.movement-state {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 35px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.movement-state h3 {
+  margin: 4px 0 0;
+  color: var(--text-primary);
+  font-size: 15px;
+}
+
+.movement-state p {
+  margin: 0;
+  font-size: 11px;
+}
+
+.movement-error {
+  color: var(--red-accent);
+}
+
+
+/* MODAL */
+
+.movement-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  background: rgba(2, 8, 23, 0.78);
+  backdrop-filter: blur(6px);
+  animation: movementOverlayIn 0.2s ease;
+}
+
+.movement-modal {
+  width: 100%;
+  max-width: 680px;
+  max-height: calc(100vh - 50px);
+  overflow-y: auto;
+  border: 1px solid var(--border-highlight);
+  border-radius: 16px;
+  background: var(--blue-card);
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(56, 189, 248, 0.08);
+  animation: movementModalIn 0.25s ease;
+}
+
+.movement-modal::-webkit-scrollbar {
+  width: 7px;
+}
+
+.movement-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.movement-modal::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.25);
+}
+
+.movement-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 26px;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.movement-modal-header h2 {
+  margin: 5px 0 7px;
+  color: var(--text-primary);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.movement-modal-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.movement-close-button {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.movement-close-button:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: var(--red-accent);
+}
+
+.movement-close-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* MENSAJES DEL FORMULARIO */
+
+.movement-form-error,
+.movement-form-success {
+  margin: 18px 26px 0;
+  padding: 11px 13px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.movement-form-error {
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: var(--red-bg);
+  color: var(--red-accent);
+}
+
+.movement-form-success {
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: var(--green-bg);
+  color: var(--green-accent);
+}
+
+
+/* FORMULARIO */
+
+.movement-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+  padding: 24px 26px;
+}
+
+.movement-form-group {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.movement-form-full {
+  grid-column: 1 / -1;
+}
+
+.movement-form-group label {
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.movement-form-group input,
+.movement-form-group select,
+.movement-form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 11px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.movement-form-group input,
+.movement-form-group select {
+  height: 40px;
+  padding: 0 12px;
+}
+
+.movement-form-group textarea {
+  min-height: 90px;
+  padding: 11px 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.movement-form-group input:focus,
+.movement-form-group select:focus,
+.movement-form-group textarea:focus {
+  border-color: var(--blue-bright);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+}
+
+.movement-form-group input::placeholder,
+.movement-form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.movement-form-group select option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.movement-form-group input:disabled,
+.movement-form-group select:disabled,
+.movement-form-group textarea:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.movement-loading-input {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+
+/* TOTAL */
+
+.movement-form-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 26px;
+  padding: 15px 17px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 9px;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.movement-form-total span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.movement-form-total strong {
+  color: var(--blue-bright);
+  font-size: 19px;
+}
+
+
+/* BOTONES DEL MODAL */
+
+.movement-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 22px 26px 25px;
+}
+
+.movement-cancel-button,
+.movement-save-button {
+  min-height: 40px;
+  padding: 0 17px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.movement-cancel-button {
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text-secondary);
+}
+
+.movement-cancel-button:hover {
+  border-color: var(--border-highlight);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.movement-save-button {
+  border: 1px solid var(--border-highlight);
+  background: var(--blue-accent);
+  color: #ffffff;
+  box-shadow: var(--shadow-glow);
+}
+
+.movement-save-button:hover {
+  background: var(--blue-bright);
+  border-color: var(--blue-bright);
+  transform: translateY(-1px);
+}
+
+.movement-cancel-button:disabled,
+.movement-save-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* ANIMACIONES */
+
+@keyframes movementOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes movementModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+  .movimientos-page {
+    max-width: 1100px;
+    padding: 25px 25px;
+  }
+
+  .movement-table {
+    min-width: 900px;
+  }
+
+  .movement-table th,
+  .movement-table td {
+    padding: 12px 10px;
+  }
+}
+
+@media (max-width: 850px) {
+  .movimientos-page {
+    padding: 22px 18px;
+  }
+
+  .movement-summary {
+    gap: 14px;
+  }
+
+  .movement-summary > div {
+    padding: 17px;
+  }
+
+  .movements-toolbar {
+    padding: 16px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+
+  .movement-new-button {
+    padding: 10px 13px;
+  }
+}
+
+@media (max-width: 700px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .movement-new-button {
+    width: 100%;
+  }
+
+  .movement-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .movement-search {
+    width: 100%;
+  }
+
+  .movements-toolbar {
+    display: block;
+  }
+
+  .movement-form {
+    grid-template-columns: 1fr;
+  }
+
+  .movement-form-full {
+    grid-column: auto;
+  }
+
+  .movement-modal-overlay {
+    padding: 15px;
+  }
+
+  .movement-modal {
+    max-height: calc(100vh - 30px);
+    border-radius: 13px;
+  }
+
+  .movement-modal-header {
+    padding: 20px;
+  }
+
+  .movement-form {
+    padding: 20px;
+  }
+
+  .movement-form-error,
+  .movement-form-success {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .movement-form-total {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .movement-modal-actions {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .movimientos-page {
+    padding: 18px 14px;
+  }
+
+  .movement-summary {
+    gap: 12px;
+  }
+
+  .movement-summary > div {
+    padding: 15px;
+  }
+
+  .movement-summary strong {
+    font-size: 21px;
+  }
+
+  .movements-panel {
+    border-radius: 10px;
+  }
+
+  .movement-modal-header {
+    padding: 18px;
+  }
+
+  .movement-modal-header h2 {
+    font-size: 19px;
+  }
+
+  .movement-form {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .movement-form-total {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .movement-modal-actions {
+    flex-direction: column-reverse;
+    padding: 18px;
+  }
+
+  .movement-cancel-button,
+  .movement-save-button {
+    width: 100%;
+  }
+}
