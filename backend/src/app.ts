@@ -1,3 +1,4 @@
+
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -19,11 +20,21 @@ import {
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://celebrated-cooperation-production-354b.up.railway.app",
+];
+
 app.use(
   cors({
-    origin:
-      process.env.FRONTEND_URL ||
-      "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Origen no permitido por CORS"));
+      }
+    },
+    credentials: true,
   }),
 );
 
@@ -32,8 +43,7 @@ app.use(express.json());
 app.get("/api/health", (_req, res) => {
   res.json({
     success: true,
-    message:
-      "API del sistema de inventario funcionando",
+    message: "API del sistema de inventario funcionando",
   });
 });
 
@@ -45,8 +55,7 @@ app.get("/api/health/db", async (_req, res) => {
 
     res.json({
       success: true,
-      message:
-        "Conexión con PostgreSQL funcionando",
+      message: "Conexión con PostgreSQL funcionando",
       database: process.env.DB_NAME,
       fecha: result.rows[0].fecha,
     });
@@ -58,8 +67,7 @@ app.get("/api/health/db", async (_req, res) => {
 
     res.status(500).json({
       success: false,
-      message:
-        "No se pudo conectar con PostgreSQL",
+      message: "No se pudo conectar con PostgreSQL",
     });
   }
 });
@@ -112,3 +120,4 @@ app.get(
 );
 
 export default app;
+
