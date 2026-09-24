@@ -1,4 +1,3 @@
-
 import {
   Bell,
   Check,
@@ -55,6 +54,10 @@ interface UsuarioActual {
   ubicacion_id: number | null;
   ubicacion_nombre: string | null;
 }
+
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
 
 export default function Configuracion() {
   const [section, setSection] =
@@ -115,7 +118,7 @@ export default function Configuracion() {
         localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:3000/api/configuracion",
+        `${API_URL}/configuracion`,
         {
           method: "GET",
           headers: {
@@ -161,7 +164,7 @@ export default function Configuracion() {
         localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:3000/api/configuracion/ubicaciones",
+        `${API_URL}/configuracion/ubicaciones`,
         {
           method: "GET",
           headers: {
@@ -225,7 +228,7 @@ export default function Configuracion() {
         localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:3000/api/configuracion",
+        `${API_URL}/configuracion`,
         {
           method: "PUT",
           headers: {
@@ -411,11 +414,8 @@ export default function Configuracion() {
 
   return (
     <div className="configuracion-page">
-
       <div className="configuracion-header">
-
         <div>
-
           <span className="configuracion-kicker">
             <Settings size={13} />
             ADMINISTRACIÓN
@@ -449,7 +449,6 @@ export default function Configuracion() {
             {" · "}
             {rolUsuario}
           </div>
-
         </div>
 
         <button
@@ -474,7 +473,6 @@ export default function Configuracion() {
             </>
           )}
         </button>
-
       </div>
 
       {error && (
@@ -484,9 +482,7 @@ export default function Configuracion() {
       )}
 
       <div className="configuracion-layout">
-
         <aside className="configuracion-menu">
-
           {opciones.map((opcion) => {
             const Icon = opcion.icono;
 
@@ -518,16 +514,12 @@ export default function Configuracion() {
               </button>
             );
           })}
-
         </aside>
 
         <section className="configuracion-panel">
-
           {section === "general" && (
             <div className="configuracion-section">
-
               <div className="configuracion-section-title">
-
                 <div className="configuracion-section-icon">
                   <Globe size={19} />
                 </div>
@@ -541,11 +533,9 @@ export default function Configuracion() {
                     Información principal del sistema.
                   </p>
                 </div>
-
               </div>
 
               <div className="configuracion-grid">
-
                 <div className="configuracion-field">
                   <label>
                     Nombre del sistema
@@ -725,11 +715,9 @@ export default function Configuracion() {
                     }
                   />
                 </div>
-
               </div>
 
               <div className="configuracion-info">
-
                 <div className="configuracion-info-icon">
                   <ShieldCheck size={19} />
                 </div>
@@ -746,17 +734,13 @@ export default function Configuracion() {
                     Saucos y 450.
                   </p>
                 </div>
-
               </div>
-
             </div>
           )}
 
           {section === "notificaciones" && (
             <div className="configuracion-section">
-
               <div className="configuracion-section-title">
-
                 <div className="configuracion-section-icon">
                   <Bell size={19} />
                 </div>
@@ -770,11 +754,9 @@ export default function Configuracion() {
                     Configura las alertas del sistema.
                   </p>
                 </div>
-
               </div>
 
               <div className="configuracion-options">
-
                 <div className="configuracion-option">
                   <div>
                     <strong>
@@ -898,17 +880,13 @@ export default function Configuracion() {
                     <span />
                   </label>
                 </div>
-
               </div>
-
             </div>
           )}
 
           {section === "seguridad" && (
             <div className="configuracion-section">
-
               <div className="configuracion-section-title">
-
                 <div className="configuracion-section-icon">
                   <Lock size={19} />
                 </div>
@@ -922,11 +900,9 @@ export default function Configuracion() {
                     Administra las opciones de seguridad.
                   </p>
                 </div>
-
               </div>
 
               <div className="configuracion-options">
-
                 <div className="configuracion-option">
                   <div>
                     <strong>
@@ -1020,11 +996,9 @@ export default function Configuracion() {
                     <span />
                   </label>
                 </div>
-
               </div>
 
               <div className="configuracion-security">
-
                 <div className="configuracion-security-icon">
                   <ShieldCheck size={20} />
                 </div>
@@ -1040,17 +1014,13 @@ export default function Configuracion() {
                     se conecte con el backend.
                   </p>
                 </div>
-
               </div>
-
             </div>
           )}
 
           {section === "sistema" && (
             <div className="configuracion-section">
-
               <div className="configuracion-section-title">
-
                 <div className="configuracion-section-icon">
                   <Database size={19} />
                 </div>
@@ -1065,11 +1035,9 @@ export default function Configuracion() {
                     MedInventory.
                   </p>
                 </div>
-
               </div>
 
               <div className="configuracion-system">
-
                 <div>
                   <span>
                     Versión
@@ -1129,11 +1097,9 @@ export default function Configuracion() {
                     ● Operativo
                   </strong>
                 </div>
-
               </div>
 
               <div className="configuracion-database">
-
                 <Database size={19} />
 
                 <div>
@@ -1147,17 +1113,11 @@ export default function Configuracion() {
                     inventario y movimientos.
                   </p>
                 </div>
-
               </div>
-
             </div>
           )}
-
         </section>
-
       </div>
-
     </div>
   );
 }
-

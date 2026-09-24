@@ -52,6 +52,10 @@ interface MovimientoForm {
   observaciones: string;
 }
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
+
 function Movimientos() {
   const [search, setSearch] = useState("");
   const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
@@ -64,14 +68,15 @@ function Movimientos() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [guardando, setGuardando] = useState(false);
 
-  const [formulario, setFormulario] = useState<MovimientoForm>({
-    tipo: "entrada_proveedor",
-    destino_id: 1,
-    producto_id: 0,
-    cantidad: 1,
-    precio_unitario: 0,
-    observaciones: "",
-  });
+  const [formulario, setFormulario] =
+    useState<MovimientoForm>({
+      tipo: "entrada_proveedor",
+      destino_id: 1,
+      producto_id: 0,
+      cantidad: 1,
+      precio_unitario: 0,
+      observaciones: "",
+    });
 
   async function cargarMovimientos() {
     try {
@@ -86,7 +91,7 @@ function Movimientos() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/movimientos",
+        `${API_URL}/movimientos`,
         {
           method: "GET",
           headers: {
@@ -96,17 +101,22 @@ function Movimientos() {
         }
       );
 
-      const result: ApiResponse = await response.json();
+      const result: ApiResponse =
+        await response.json();
 
       if (!response.ok || !result.success) {
         throw new Error(
-          result.message || "No se pudieron obtener los movimientos."
+          result.message ||
+            "No se pudieron obtener los movimientos."
         );
       }
 
       setMovimientos(result.data);
     } catch (error) {
-      console.error("Error al cargar movimientos:", error);
+      console.error(
+        "Error al cargar movimientos:",
+        error
+      );
 
       setError(
         error instanceof Error
@@ -129,7 +139,7 @@ function Movimientos() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/productos",
+        `${API_URL}/productos`,
         {
           method: "GET",
           headers: {
@@ -139,11 +149,13 @@ function Movimientos() {
         }
       );
 
-      const result: ProductosResponse = await response.json();
+      const result: ProductosResponse =
+        await response.json();
 
       if (!response.ok || !result.success) {
         throw new Error(
-          result.message || "No se pudieron obtener los productos."
+          result.message ||
+            "No se pudieron obtener los productos."
         );
       }
 
@@ -153,11 +165,16 @@ function Movimientos() {
         setFormulario((actual) => ({
           ...actual,
           producto_id: result.data[0].id,
-          precio_unitario: Number(result.data[0].precio),
+          precio_unitario: Number(
+            result.data[0].precio
+          ),
         }));
       }
     } catch (error) {
-      console.error("Error al cargar productos:", error);
+      console.error(
+        "Error al cargar productos:",
+        error
+      );
 
       setFormError(
         error instanceof Error
@@ -174,22 +191,31 @@ function Movimientos() {
     cargarProductos();
   }, []);
 
-  const movimientosFiltrados = movimientos.filter((movimiento) => {
-    const texto = search.toLowerCase();
+  const movimientosFiltrados =
+    movimientos.filter((movimiento) => {
+      const texto = search.toLowerCase();
 
-    return (
-      movimiento.folio.toLowerCase().includes(texto) ||
-      movimiento.origen.toLowerCase().includes(texto) ||
-      movimiento.destino.toLowerCase().includes(texto)
-    );
-  });
+      return (
+        movimiento.folio
+          .toLowerCase()
+          .includes(texto) ||
+        movimiento.origen
+          .toLowerCase()
+          .includes(texto) ||
+        movimiento.destino
+          .toLowerCase()
+          .includes(texto)
+      );
+    });
 
   const entradas = movimientos.filter(
-    (movimiento) => movimiento.tipo === "Entrada de proveedor"
+    (movimiento) =>
+      movimiento.tipo === "Entrada de proveedor"
   ).length;
 
   const traslados = movimientos.filter(
-    (movimiento) => movimiento.tipo === "Traslado a sucursal"
+    (movimiento) =>
+      movimiento.tipo === "Traslado a sucursal"
   ).length;
 
   function abrirFormulario() {
@@ -222,7 +248,9 @@ function Movimientos() {
     setFormSuccess("");
   }
 
-  function cambiarProducto(productoId: number) {
+  function cambiarProducto(
+    productoId: number
+  ) {
     const producto = productos.find(
       (item) => item.id === productoId
     );
@@ -230,17 +258,22 @@ function Movimientos() {
     setFormulario((actual) => ({
       ...actual,
       producto_id: productoId,
-      precio_unitario: producto ? Number(producto.precio) : 0,
+      precio_unitario: producto
+        ? Number(producto.precio)
+        : 0,
     }));
   }
 
   function cambiarTipo(
-    tipo: "entrada_proveedor" | "traslado_sucursal"
+    tipo:
+      | "entrada_proveedor"
+      | "traslado_sucursal"
   ) {
     setFormulario((actual) => ({
       ...actual,
       tipo,
-      destino_id: tipo === "entrada_proveedor" ? 1 : 2,
+      destino_id:
+        tipo === "entrada_proveedor" ? 1 : 2,
     }));
 
     setFormError("");
@@ -266,18 +299,25 @@ function Movimientos() {
     }
 
     if (
-      !Number.isFinite(formulario.precio_unitario) ||
+      !Number.isFinite(
+        formulario.precio_unitario
+      ) ||
       formulario.precio_unitario < 0
     ) {
-      setFormError("El precio unitario no es válido.");
+      setFormError(
+        "El precio unitario no es válido."
+      );
       return;
     }
 
     if (
-      formulario.tipo === "traslado_sucursal" &&
+      formulario.tipo ===
+        "traslado_sucursal" &&
       !formulario.destino_id
     ) {
-      setFormError("Selecciona una sucursal de destino.");
+      setFormError(
+        "Selecciona una sucursal de destino."
+      );
       return;
     }
 
@@ -287,31 +327,39 @@ function Movimientos() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        setFormError("No hay una sesión activa.");
+        setFormError(
+          "No hay una sesión activa."
+        );
         return;
       }
 
       const body = {
         tipo: formulario.tipo,
 
-        ...(formulario.tipo === "traslado_sucursal" && {
-          destino_id: formulario.destino_id,
+        ...(formulario.tipo ===
+          "traslado_sucursal" && {
+          destino_id:
+            formulario.destino_id,
         }),
 
         detalles: [
           {
-            producto_id: formulario.producto_id,
-            cantidad: formulario.cantidad,
-            precio_unitario: formulario.precio_unitario,
+            producto_id:
+              formulario.producto_id,
+            cantidad:
+              formulario.cantidad,
+            precio_unitario:
+              formulario.precio_unitario,
           },
         ],
 
         observaciones:
-          formulario.observaciones.trim() || undefined,
+          formulario.observaciones.trim() ||
+          undefined,
       };
 
       const response = await fetch(
-        "http://localhost:3000/api/movimientos",
+        `${API_URL}/movimientos`,
         {
           method: "POST",
           headers: {
@@ -322,11 +370,13 @@ function Movimientos() {
         }
       );
 
-      const result = await response.json();
+      const result =
+        await response.json();
 
       if (!response.ok || !result.success) {
         throw new Error(
-          result.message || "No se pudo registrar el movimiento."
+          result.message ||
+            "No se pudo registrar el movimiento."
         );
       }
 
@@ -341,7 +391,10 @@ function Movimientos() {
         setFormSuccess("");
       }, 1200);
     } catch (error) {
-      console.error("Error al guardar movimiento:", error);
+      console.error(
+        "Error al guardar movimiento:",
+        error
+      );
 
       setFormError(
         error instanceof Error
@@ -357,12 +410,15 @@ function Movimientos() {
     <div className="movimientos-page">
       <div className="page-header">
         <div>
-          <span className="page-kicker">HISTORIAL</span>
+          <span className="page-kicker">
+            HISTORIAL
+          </span>
 
           <h1>Movimientos</h1>
 
           <p>
-            Consulta y registra las entradas y traslados de inventario.
+            Consulta y registra las entradas y
+            traslados de inventario.
           </p>
         </div>
 
@@ -377,12 +433,18 @@ function Movimientos() {
 
       <section className="movement-summary">
         <div>
-          <span>Movimientos registrados</span>
-          <strong>{movimientos.length}</strong>
+          <span>
+            Movimientos registrados
+          </span>
+          <strong>
+            {movimientos.length}
+          </strong>
         </div>
 
         <div>
-          <span>Entradas de proveedor</span>
+          <span>
+            Entradas de proveedor
+          </span>
           <strong>{entradas}</strong>
         </div>
 
@@ -401,14 +463,20 @@ function Movimientos() {
               type="text"
               placeholder="Buscar por folio, origen o destino..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) =>
+                setSearch(
+                  event.target.value
+                )
+              }
             />
           </div>
         </div>
 
         {loading && (
           <div className="movement-state">
-            <p>Cargando movimientos...</p>
+            <p>
+              Cargando movimientos...
+            </p>
           </div>
         )}
 
@@ -420,7 +488,8 @@ function Movimientos() {
 
         {!loading &&
           !error &&
-          movimientosFiltrados.length === 0 && (
+          movimientosFiltrados.length ===
+            0 && (
             <div className="movement-state">
               <FileText size={40} />
 
@@ -440,7 +509,8 @@ function Movimientos() {
 
         {!loading &&
           !error &&
-          movimientosFiltrados.length > 0 && (
+          movimientosFiltrados.length >
+            0 && (
             <div className="movement-table-wrapper">
               <table className="movement-table">
                 <thead>
@@ -457,71 +527,106 @@ function Movimientos() {
                 </thead>
 
                 <tbody>
-                  {movimientosFiltrados.map((movimiento) => (
-                    <tr key={movimiento.id}>
-                      <td>
-                        <strong>{movimiento.folio}</strong>
-                      </td>
+                  {movimientosFiltrados.map(
+                    (movimiento) => (
+                      <tr
+                        key={movimiento.id}
+                      >
+                        <td>
+                          <strong>
+                            {
+                              movimiento.folio
+                            }
+                          </strong>
+                        </td>
 
-                      <td>
-                        <span
-                          className={`movement-type ${
-                            movimiento.tipo === "Entrada de proveedor"
-                              ? "movement-entry"
-                              : "movement-transfer"
-                          }`}
-                        >
-                          {movimiento.tipo ===
-                          "Entrada de proveedor" ? (
-                            <ArrowDownLeft size={13} />
-                          ) : (
-                            <ArrowRight size={13} />
-                          )}
+                        <td>
+                          <span
+                            className={`movement-type ${
+                              movimiento.tipo ===
+                              "Entrada de proveedor"
+                                ? "movement-entry"
+                                : "movement-transfer"
+                            }`}
+                          >
+                            {movimiento.tipo ===
+                            "Entrada de proveedor" ? (
+                              <ArrowDownLeft
+                                size={13}
+                              />
+                            ) : (
+                              <ArrowRight
+                                size={13}
+                              />
+                            )}
 
-                          {movimiento.tipo}
-                        </span>
-                      </td>
+                            {
+                              movimiento.tipo
+                            }
+                          </span>
+                        </td>
 
-                      <td>{movimiento.origen}</td>
+                        <td>
+                          {
+                            movimiento.origen
+                          }
+                        </td>
 
-                      <td>
-                        <strong>{movimiento.destino}</strong>
-                      </td>
+                        <td>
+                          <strong>
+                            {
+                              movimiento.destino
+                            }
+                          </strong>
+                        </td>
 
-                      <td>{movimiento.productos}</td>
+                        <td>
+                          {
+                            movimiento.productos
+                          }
+                        </td>
 
-                      <td>
-                        <strong>
-                          $
-                          {Number(movimiento.total).toLocaleString(
+                        <td>
+                          <strong>
+                            $
+                            {Number(
+                              movimiento.total
+                            ).toLocaleString(
+                              "es-MX",
+                              {
+                                minimumFractionDigits: 2,
+                              }
+                            )}
+                          </strong>
+                        </td>
+
+                        <td>
+                          {new Date(
+                            movimiento.fecha
+                          ).toLocaleString(
                             "es-MX",
                             {
-                              minimumFractionDigits: 2,
+                              dateStyle:
+                                "short",
+                              timeStyle:
+                                "short",
                             }
                           )}
-                        </strong>
-                      </td>
+                        </td>
 
-                      <td>
-                        {new Date(movimiento.fecha).toLocaleString(
-                          "es-MX",
-                          {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                          }
-                        )}
-                      </td>
-
-                      <td>
-                        <button
-                          className="movement-detail-button"
-                          title="Ver ticket"
-                        >
-                          <FileText size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        <td>
+                          <button
+                            className="movement-detail-button"
+                            title="Ver ticket"
+                          >
+                            <FileText
+                              size={16}
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -532,7 +637,10 @@ function Movimientos() {
         <div
           className="movement-modal-overlay"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
               cerrarFormulario();
             }
           }}
@@ -540,18 +648,25 @@ function Movimientos() {
           <div className="movement-modal">
             <div className="movement-modal-header">
               <div>
-                <span className="page-kicker">INVENTARIO</span>
+                <span className="page-kicker">
+                  INVENTARIO
+                </span>
 
-                <h2>Nuevo movimiento</h2>
+                <h2>
+                  Nuevo movimiento
+                </h2>
 
                 <p>
-                  Registra una entrada o traslado de productos.
+                  Registra una entrada o
+                  traslado de productos.
                 </p>
               </div>
 
               <button
                 className="movement-close-button"
-                onClick={cerrarFormulario}
+                onClick={
+                  cerrarFormulario
+                }
                 title="Cerrar"
                 disabled={guardando}
               >
@@ -573,10 +688,14 @@ function Movimientos() {
 
             <div className="movement-form">
               <div className="movement-form-group">
-                <label>Tipo de movimiento</label>
+                <label>
+                  Tipo de movimiento
+                </label>
 
                 <select
-                  value={formulario.tipo}
+                  value={
+                    formulario.tipo
+                  }
                   onChange={(event) =>
                     cambiarTipo(
                       event.target.value as
@@ -598,37 +717,56 @@ function Movimientos() {
 
               <div className="movement-form-group">
                 <label>
-                  {formulario.tipo === "entrada_proveedor"
+                  {formulario.tipo ===
+                  "entrada_proveedor"
                     ? "Destino"
                     : "Sucursal de destino"}
                 </label>
 
                 <select
-                  value={formulario.destino_id}
+                  value={
+                    formulario.destino_id
+                  }
                   onChange={(event) =>
-                    setFormulario((actual) => ({
-                      ...actual,
-                      destino_id: Number(event.target.value),
-                    }))
+                    setFormulario(
+                      (actual) => ({
+                        ...actual,
+                        destino_id:
+                          Number(
+                            event.target
+                              .value
+                          ),
+                      })
+                    )
                   }
                   disabled={
                     guardando ||
-                    formulario.tipo === "entrada_proveedor"
+                    formulario.tipo ===
+                      "entrada_proveedor"
                   }
                 >
-                  {formulario.tipo === "entrada_proveedor" ? (
-                    <option value={1}>Matriz</option>
+                  {formulario.tipo ===
+                  "entrada_proveedor" ? (
+                    <option value={1}>
+                      Matriz
+                    </option>
                   ) : (
                     <>
-                      <option value={2}>Saucos</option>
-                      <option value={3}>450</option>
+                      <option value={2}>
+                        Saucos
+                      </option>
+                      <option value={3}>
+                        450
+                      </option>
                     </>
                   )}
                 </select>
               </div>
 
               <div className="movement-form-group movement-form-full">
-                <label>Producto</label>
+                <label>
+                  Producto
+                </label>
 
                 {loadingProductos ? (
                   <div className="movement-loading-input">
@@ -636,77 +774,123 @@ function Movimientos() {
                   </div>
                 ) : (
                   <select
-                    value={formulario.producto_id}
+                    value={
+                      formulario.producto_id
+                    }
                     onChange={(event) =>
-                      cambiarProducto(Number(event.target.value))
+                      cambiarProducto(
+                        Number(
+                          event.target
+                            .value
+                        )
+                      )
                     }
                     disabled={
-                      guardando || productos.length === 0
+                      guardando ||
+                      productos.length ===
+                        0
                     }
                   >
                     <option value={0}>
                       Selecciona un producto
                     </option>
 
-                    {productos.map((producto) => (
-                      <option
-                        key={producto.id}
-                        value={producto.id}
-                      >
-                        {producto.sku} — {producto.nombre}
-                      </option>
-                    ))}
+                    {productos.map(
+                      (producto) => (
+                        <option
+                          key={
+                            producto.id
+                          }
+                          value={
+                            producto.id
+                          }
+                        >
+                          {producto.sku} —{" "}
+                          {
+                            producto.nombre
+                          }
+                        </option>
+                      )
+                    )}
                   </select>
                 )}
               </div>
 
               <div className="movement-form-group">
-                <label>Cantidad</label>
+                <label>
+                  Cantidad
+                </label>
 
                 <input
                   type="number"
                   min="1"
                   step="1"
-                  value={formulario.cantidad}
+                  value={
+                    formulario.cantidad
+                  }
                   onChange={(event) =>
-                    setFormulario((actual) => ({
-                      ...actual,
-                      cantidad: Number(event.target.value),
-                    }))
+                    setFormulario(
+                      (actual) => ({
+                        ...actual,
+                        cantidad:
+                          Number(
+                            event.target
+                              .value
+                          ),
+                      })
+                    )
                   }
                   disabled={guardando}
                 />
               </div>
 
               <div className="movement-form-group">
-                <label>Precio unitario</label>
+                <label>
+                  Precio unitario
+                </label>
 
                 <input
                   type="number"
                   min="0"
                   step="0.01"
-                  value={formulario.precio_unitario}
+                  value={
+                    formulario.precio_unitario
+                  }
                   onChange={(event) =>
-                    setFormulario((actual) => ({
-                      ...actual,
-                      precio_unitario: Number(event.target.value),
-                    }))
+                    setFormulario(
+                      (actual) => ({
+                        ...actual,
+                        precio_unitario:
+                          Number(
+                            event.target
+                              .value
+                          ),
+                      })
+                    )
                   }
                   disabled={guardando}
                 />
               </div>
 
               <div className="movement-form-group movement-form-full">
-                <label>Observaciones</label>
+                <label>
+                  Observaciones
+                </label>
 
                 <textarea
                   placeholder="Ej. Entrada de mercancía del proveedor..."
-                  value={formulario.observaciones}
+                  value={
+                    formulario.observaciones
+                  }
                   onChange={(event) =>
-                    setFormulario((actual) => ({
-                      ...actual,
-                      observaciones: event.target.value,
-                    }))
+                    setFormulario(
+                      (actual) => ({
+                        ...actual,
+                        observaciones:
+                          event.target
+                            .value,
+                      })
+                    )
                   }
                   maxLength={500}
                   disabled={guardando}
@@ -715,16 +899,21 @@ function Movimientos() {
             </div>
 
             <div className="movement-form-total">
-              <span>Total estimado</span>
+              <span>
+                Total estimado
+              </span>
 
               <strong>
                 $
                 {(
                   formulario.cantidad *
                   formulario.precio_unitario
-                ).toLocaleString("es-MX", {
-                  minimumFractionDigits: 2,
-                })}
+                ).toLocaleString(
+                  "es-MX",
+                  {
+                    minimumFractionDigits: 2,
+                  }
+                )}
               </strong>
             </div>
 
@@ -732,7 +921,9 @@ function Movimientos() {
               <button
                 type="button"
                 className="movement-cancel-button"
-                onClick={cerrarFormulario}
+                onClick={
+                  cerrarFormulario
+                }
                 disabled={guardando}
               >
                 Cancelar
@@ -741,7 +932,9 @@ function Movimientos() {
               <button
                 type="button"
                 className="movement-save-button"
-                onClick={guardarMovimiento}
+                onClick={
+                  guardarMovimiento
+                }
                 disabled={
                   guardando ||
                   loadingProductos ||

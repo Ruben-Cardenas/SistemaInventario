@@ -69,24 +69,38 @@ interface DashboardResponse {
   data: DashboardData;
 }
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
+
 function Dashboard() {
-  const [dashboard, setDashboard] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [dashboard, setDashboard] =
+    useState<DashboardData | null>(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
 
   useEffect(() => {
     const obtenerDashboard = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token =
+          localStorage.getItem("token");
 
         if (!token) {
-          setError("No hay una sesión activa.");
+          setError(
+            "No hay una sesión activa.",
+          );
+
           setLoading(false);
+
           return;
         }
 
         const response = await fetch(
-          "http://localhost:3000/api/dashboard",
+          `${API_URL}/dashboard`,
           {
             method: "GET",
             headers: {
@@ -96,17 +110,25 @@ function Dashboard() {
           },
         );
 
-        const resultado: DashboardResponse = await response.json();
+        const resultado: DashboardResponse =
+          await response.json();
 
-        if (!response.ok || !resultado.success) {
+        if (
+          !response.ok ||
+          !resultado.success
+        ) {
           throw new Error(
-            resultado.message || "No se pudieron obtener los datos.",
+            resultado.message ||
+              "No se pudieron obtener los datos.",
           );
         }
 
         setDashboard(resultado.data);
       } catch (error) {
-        console.error("Error al cargar dashboard:", error);
+        console.error(
+          "Error al cargar dashboard:",
+          error,
+        );
 
         setError(
           error instanceof Error
@@ -121,22 +143,36 @@ function Dashboard() {
     obtenerDashboard();
   }, []);
 
-  const formatearNumero = (numero: number) => {
-    return new Intl.NumberFormat("es-MX").format(numero);
+  const formatearNumero = (
+    numero: number,
+  ) => {
+    return new Intl.NumberFormat(
+      "es-MX",
+    ).format(numero);
   };
 
-  const formatearFecha = (fecha: string) => {
-    const fechaObjeto = new Date(fecha);
+  const formatearFecha = (
+    fecha: string,
+  ) => {
+    const fechaObjeto =
+      new Date(fecha);
 
-    if (Number.isNaN(fechaObjeto.getTime())) {
+    if (
+      Number.isNaN(
+        fechaObjeto.getTime(),
+      )
+    ) {
       return fecha;
     }
 
-    return fechaObjeto.toLocaleDateString("es-MX", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
+    return fechaObjeto.toLocaleDateString(
+      "es-MX",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      },
+    );
   };
 
   const datosGrafica = useMemo(() => {
@@ -153,56 +189,89 @@ function Dashboard() {
       }
     >();
 
-    dashboard.graficaMovimientos.forEach((item) => {
-      if (!meses.has(item.numero_mes)) {
-        meses.set(item.numero_mes, {
-          mes: item.mes,
-          entrada: 0,
-          traslado: 0,
-        });
-      }
+    dashboard.graficaMovimientos.forEach(
+      (item) => {
+        if (
+          !meses.has(
+            item.numero_mes,
+          )
+        ) {
+          meses.set(
+            item.numero_mes,
+            {
+              mes: item.mes,
+              entrada: 0,
+              traslado: 0,
+            },
+          );
+        }
 
-      const actual = meses.get(item.numero_mes);
+        const actual =
+          meses.get(
+            item.numero_mes,
+          );
 
-      if (!actual) {
-        return;
-      }
+        if (!actual) {
+          return;
+        }
 
-      if (item.tipo === "entrada_proveedor") {
-        actual.entrada += item.cantidad;
-      }
+        if (
+          item.tipo ===
+          "entrada_proveedor"
+        ) {
+          actual.entrada +=
+            item.cantidad;
+        }
 
-      if (item.tipo === "traslado_sucursal") {
-        actual.traslado += item.cantidad;
-      }
-    });
+        if (
+          item.tipo ===
+          "traslado_sucursal"
+        ) {
+          actual.traslado +=
+            item.cantidad;
+        }
+      },
+    );
 
-    return Array.from(meses.values());
+    return Array.from(
+      meses.values(),
+    );
   }, [dashboard]);
 
   const maxGrafica = useMemo(() => {
-    if (datosGrafica.length === 0) {
+    if (
+      datosGrafica.length === 0
+    ) {
       return 100;
     }
 
     const maximo = Math.max(
-      ...datosGrafica.flatMap((item) => [
-        item.entrada,
-        item.traslado,
-      ]),
+      ...datosGrafica.flatMap(
+        (item) => [
+          item.entrada,
+          item.traslado,
+        ],
+      ),
     );
 
-    return maximo > 0 ? maximo : 100;
+    return maximo > 0
+      ? maximo
+      : 100;
   }, [datosGrafica]);
 
   const ubicacionMaxima = useMemo(() => {
-    if (!dashboard || dashboard.inventarioPorUbicacion.length === 0) {
+    if (
+      !dashboard ||
+      dashboard.inventarioPorUbicacion
+        .length === 0
+    ) {
       return 1;
     }
 
     return Math.max(
       ...dashboard.inventarioPorUbicacion.map(
-        (ubicacion) => ubicacion.cantidad,
+        (ubicacion) =>
+          ubicacion.cantidad,
       ),
       1,
     );
@@ -218,7 +287,9 @@ function Dashboard() {
               RESUMEN DEL SISTEMA
             </span>
 
-            <h1>Dashboard</h1>
+            <h1>
+              Dashboard
+            </h1>
 
             <p>
               Consulta el estado general del inventario
@@ -228,7 +299,12 @@ function Dashboard() {
         </section>
 
         <div className="dashboard-card">
-          <div style={{ padding: "40px", textAlign: "center" }}>
+          <div
+            style={{
+              padding: "40px",
+              textAlign: "center",
+            }}
+          >
             Cargando información del inventario...
           </div>
         </div>
@@ -236,7 +312,10 @@ function Dashboard() {
     );
   }
 
-  if (error || !dashboard) {
+  if (
+    error ||
+    !dashboard
+  ) {
     return (
       <div className="dashboard-page">
         <section className="dashboard-heading">
@@ -246,7 +325,9 @@ function Dashboard() {
               RESUMEN DEL SISTEMA
             </span>
 
-            <h1>Dashboard</h1>
+            <h1>
+              Dashboard
+            </h1>
 
             <p>
               Consulta el estado general del inventario
@@ -256,13 +337,21 @@ function Dashboard() {
         </section>
 
         <div className="dashboard-card">
-          <div style={{ padding: "40px", textAlign: "center" }}>
+          <div
+            style={{
+              padding: "40px",
+              textAlign: "center",
+            }}
+          >
             <AlertTriangle size={30} />
 
-            <h2>No se pudo cargar el dashboard</h2>
+            <h2>
+              No se pudo cargar el dashboard
+            </h2>
 
             <p>
-              {error || "No se recibieron datos del servidor."}
+              {error ||
+                "No se recibieron datos del servidor."}
             </p>
           </div>
         </div>
@@ -279,7 +368,9 @@ function Dashboard() {
             RESUMEN DEL SISTEMA
           </span>
 
-          <h1>Dashboard</h1>
+          <h1>
+            Dashboard
+          </h1>
 
           <p>
             Consulta el estado general del inventario
@@ -288,13 +379,19 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-date">
-          <span>ACTUALIZADO</span>
+          <span>
+            ACTUALIZADO
+          </span>
+
           <strong>
-            {new Date().toLocaleDateString("es-MX", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            })}
+            {new Date().toLocaleDateString(
+              "es-MX",
+              {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              },
+            )}
           </strong>
         </div>
       </section>
@@ -306,11 +403,14 @@ function Dashboard() {
           </div>
 
           <div>
-            <span>Total de productos</span>
+            <span>
+              Total de productos
+            </span>
 
             <strong>
               {formatearNumero(
-                dashboard.resumen.totalProductos,
+                dashboard.resumen
+                  .totalProductos,
               )}
             </strong>
 
@@ -327,11 +427,14 @@ function Dashboard() {
           </div>
 
           <div>
-            <span>Stock total</span>
+            <span>
+              Stock total
+            </span>
 
             <strong>
               {formatearNumero(
-                dashboard.resumen.stockTotal,
+                dashboard.resumen
+                  .stockTotal,
               )}
             </strong>
 
@@ -348,11 +451,14 @@ function Dashboard() {
           </div>
 
           <div>
-            <span>Stock bajo</span>
+            <span>
+              Stock bajo
+            </span>
 
             <strong>
               {formatearNumero(
-                dashboard.resumen.stockBajo,
+                dashboard.resumen
+                  .stockBajo,
               )}
             </strong>
 
@@ -368,11 +474,14 @@ function Dashboard() {
           </div>
 
           <div>
-            <span>Movimientos</span>
+            <span>
+              Movimientos
+            </span>
 
             <strong>
               {formatearNumero(
-                dashboard.resumen.movimientos,
+                dashboard.resumen
+                  .movimientos,
               )}
             </strong>
 
@@ -388,7 +497,9 @@ function Dashboard() {
         <div className="dashboard-card movement-chart">
           <div className="dashboard-card-header">
             <div>
-              <h2>Movimientos de inventario</h2>
+              <h2>
+                Movimientos de inventario
+              </h2>
 
               <p>
                 Actividad registrada durante los últimos
@@ -421,17 +532,31 @@ function Dashboard() {
 
           <div className="fake-chart">
             <div className="chart-y">
-              <span>{maxGrafica}</span>
               <span>
-                {Math.round(maxGrafica * 0.75)}
+                {maxGrafica}
               </span>
+
               <span>
-                {Math.round(maxGrafica * 0.5)}
+                {Math.round(
+                  maxGrafica * 0.75,
+                )}
               </span>
+
               <span>
-                {Math.round(maxGrafica * 0.25)}
+                {Math.round(
+                  maxGrafica * 0.5,
+                )}
               </span>
-              <span>0</span>
+
+              <span>
+                {Math.round(
+                  maxGrafica * 0.25,
+                )}
+              </span>
+
+              <span>
+                0
+              </span>
             </div>
 
             <div className="chart-area">
@@ -452,22 +577,29 @@ function Dashboard() {
                   >
                     <polyline
                       points={datosGrafica
-                        .map((item, index) => {
-                          const x =
-                            datosGrafica.length === 1
-                              ? 300
-                              : (index /
-                                  (datosGrafica.length - 1)) *
-                                600;
+                        .map(
+                          (
+                            item,
+                            index,
+                          ) => {
+                            const x =
+                              datosGrafica.length ===
+                              1
+                                ? 300
+                                : (index /
+                                    (datosGrafica.length -
+                                      1)) *
+                                  600;
 
-                          const y =
-                            200 -
-                            (item.entrada /
-                              maxGrafica) *
-                              170;
+                            const y =
+                              200 -
+                              (item.entrada /
+                                maxGrafica) *
+                                170;
 
-                          return `${x},${y}`;
-                        })
+                            return `${x},${y}`;
+                          },
+                        )
                         .join(" ")}
                       fill="none"
                       stroke="#2563eb"
@@ -478,22 +610,29 @@ function Dashboard() {
 
                     <polyline
                       points={datosGrafica
-                        .map((item, index) => {
-                          const x =
-                            datosGrafica.length === 1
-                              ? 300
-                              : (index /
-                                  (datosGrafica.length - 1)) *
-                                600;
+                        .map(
+                          (
+                            item,
+                            index,
+                          ) => {
+                            const x =
+                              datosGrafica.length ===
+                              1
+                                ? 300
+                                : (index /
+                                    (datosGrafica.length -
+                                      1)) *
+                                  600;
 
-                          const y =
-                            200 -
-                            (item.traslado /
-                              maxGrafica) *
-                              170;
+                            const y =
+                              200 -
+                              (item.traslado /
+                                maxGrafica) *
+                                170;
 
-                          return `${x},${y}`;
-                        })
+                            return `${x},${y}`;
+                          },
+                        )
                         .join(" ")}
                       fill="none"
                       stroke="#38bdf8"
@@ -504,11 +643,15 @@ function Dashboard() {
                   </svg>
 
                   <div className="chart-months">
-                    {datosGrafica.map((item) => (
-                      <span key={item.mes}>
-                        {item.mes}
-                      </span>
-                    ))}
+                    {datosGrafica.map(
+                      (item) => (
+                        <span
+                          key={item.mes}
+                        >
+                          {item.mes}
+                        </span>
+                      ),
+                    )}
                   </div>
                 </>
               ) : (
@@ -518,7 +661,8 @@ function Dashboard() {
                     minHeight: "220px",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent:
+                      "center",
                   }}
                 >
                   <span>
@@ -533,9 +677,13 @@ function Dashboard() {
         <div className="dashboard-card locations-card">
           <div className="dashboard-card-header">
             <div>
-              <h2>Inventario por ubicación</h2>
+              <h2>
+                Inventario por ubicación
+              </h2>
 
-              <p>Existencias actuales.</p>
+              <p>
+                Existencias actuales.
+              </p>
             </div>
 
             <div className="small-blue-icon">
@@ -601,7 +749,9 @@ function Dashboard() {
         <div className="dashboard-card">
           <div className="dashboard-card-header">
             <div>
-              <h2>Productos con stock bajo</h2>
+              <h2>
+                Productos con stock bajo
+              </h2>
 
               <p>
                 Productos que necesitan reabastecimiento.
@@ -620,18 +770,37 @@ function Dashboard() {
             <table className="dashboard-table">
               <thead>
                 <tr>
-                  <th>PRODUCTO</th>
-                  <th>SKU</th>
-                  <th>UBICACIÓN</th>
-                  <th>STOCK</th>
-                  <th>ESTADO</th>
+                  <th>
+                    PRODUCTO
+                  </th>
+
+                  <th>
+                    SKU
+                  </th>
+
+                  <th>
+                    UBICACIÓN
+                  </th>
+
+                  <th>
+                    STOCK
+                  </th>
+
+                  <th>
+                    ESTADO
+                  </th>
                 </tr>
               </thead>
 
               <tbody>
-                {dashboard.stockBajoProductos.length > 0 ? (
+                {dashboard
+                  .stockBajoProductos
+                  .length > 0 ? (
                   dashboard.stockBajoProductos.map(
-                    (item, index) => (
+                    (
+                      item,
+                      index,
+                    ) => (
                       <tr
                         key={`${item.sku}-${item.ubicacion}-${index}`}
                       >
@@ -673,8 +842,10 @@ function Dashboard() {
                     <td
                       colSpan={5}
                       style={{
-                        textAlign: "center",
-                        padding: "30px",
+                        textAlign:
+                          "center",
+                        padding:
+                          "30px",
                       }}
                     >
                       No hay productos con stock bajo.
@@ -689,19 +860,27 @@ function Dashboard() {
         <div className="dashboard-card activity-card">
           <div className="dashboard-card-header">
             <div>
-              <h2>Actividad reciente</h2>
+              <h2>
+                Actividad reciente
+              </h2>
 
-              <p>Últimos movimientos.</p>
+              <p>
+                Últimos movimientos.
+              </p>
             </div>
           </div>
 
           <div className="activity-list">
-            {dashboard.movimientosRecientes.length > 0 ? (
+            {dashboard
+              .movimientosRecientes
+              .length > 0 ? (
               dashboard.movimientosRecientes.map(
                 (movimiento) => (
                   <div
                     className="activity-item"
-                    key={movimiento.folio}
+                    key={
+                      movimiento.folio
+                    }
                   >
                     <div
                       className={`activity-icon ${
@@ -713,9 +892,13 @@ function Dashboard() {
                     >
                       {movimiento.tipo ===
                       "entrada_proveedor" ? (
-                        <ArrowDownLeft size={17} />
+                        <ArrowDownLeft
+                          size={17}
+                        />
                       ) : (
-                        <ArrowUpRight size={17} />
+                        <ArrowUpRight
+                          size={17}
+                        />
                       )}
                     </div>
 
@@ -741,7 +924,10 @@ function Dashboard() {
 
                     <strong className="activity-amount">
                       {movimiento.cantidad}
-                      <small> uds.</small>
+                      <small>
+                        {" "}
+                        uds.
+                      </small>
                     </strong>
                   </div>
                 ),
@@ -749,8 +935,10 @@ function Dashboard() {
             ) : (
               <div
                 style={{
-                  padding: "30px 20px",
-                  textAlign: "center",
+                  padding:
+                    "30px 20px",
+                  textAlign:
+                    "center",
                 }}
               >
                 <Activity size={25} />

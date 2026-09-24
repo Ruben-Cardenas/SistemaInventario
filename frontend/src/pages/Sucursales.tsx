@@ -9,6 +9,10 @@ import {
 import { useEffect, useState } from "react";
 import "./Sucursales.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
+
 interface Sucursal {
   id: number;
   nombre: string;
@@ -80,7 +84,7 @@ function Sucursales() {
         }
 
         const response = await fetch(
-          "http://localhost:3000/api/sucursales",
+          `${API_URL}/sucursales`,
           {
             method: "GET",
             headers: {
@@ -138,7 +142,7 @@ function Sucursales() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/sucursales/${sucursal.id}/inventario`,
+        `${API_URL}/sucursales/${sucursal.id}/inventario`,
         {
           method: "GET",
           headers: {

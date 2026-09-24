@@ -20,7 +20,9 @@ interface Stock {
   precio: number;
 }
 
-const API_URL = "http://localhost:3000";
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
 
 function Inventario() {
   const [inventario, setInventario] = useState<Stock[]>([]);
@@ -46,7 +48,7 @@ function Inventario() {
       }
 
       const response = await fetch(
-        `${API_URL}/api/productos/inventario`,
+        `${API_URL}/productos/inventario`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,8 +75,12 @@ function Inventario() {
           producto: item.producto,
           categoria: item.categoria,
           ubicacion: item.ubicacion,
-          stock: Number(item.stock ?? item.cantidad ?? 0),
-          minimo: Number(item.minimo ?? item.stock_minimo ?? 0),
+          stock: Number(
+            item.stock ?? item.cantidad ?? 0
+          ),
+          minimo: Number(
+            item.minimo ?? item.stock_minimo ?? 0
+          ),
           precio: Number(item.precio ?? 0),
         })
       );
@@ -182,6 +188,7 @@ function Inventario() {
 
           <div>
             <span>Stock total</span>
+
             <strong>
               {totalStock.toLocaleString("es-MX")}
             </strong>
@@ -195,6 +202,7 @@ function Inventario() {
 
           <div>
             <span>Stock bajo</span>
+
             <strong>{stockBajo}</strong>
           </div>
         </div>
@@ -206,6 +214,7 @@ function Inventario() {
 
           <div>
             <span>Ubicaciones</span>
+
             <strong>
               {ubicaciones.length}
             </strong>

@@ -52,6 +52,10 @@ function Usuarios() {
 
   const [mensaje, setMensaje] = useState("");
 
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:3000/api";
+
   const token = localStorage.getItem("token");
 
   const cargarUsuarios = async () => {
@@ -65,7 +69,7 @@ function Usuarios() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/usuarios",
+        `${API_URL}/usuarios`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -119,7 +123,7 @@ function Usuarios() {
       const nuevoEstado = !usuario.activo;
 
       const response = await fetch(
-        `http://localhost:3000/api/usuarios/${usuario.id}/estado`,
+        `${API_URL}/usuarios/${usuario.id}/estado`,
         {
           method: "PATCH",
           headers: {
@@ -210,7 +214,7 @@ function Usuarios() {
       setGuardandoPassword(true);
 
       const response = await fetch(
-        `http://localhost:3000/api/usuarios/${modalPassword.id}/password`,
+        `${API_URL}/usuarios/${modalPassword.id}/password`,
         {
           method: "PATCH",
           headers: {

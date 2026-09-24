@@ -32,8 +32,7 @@ interface LoginResponse {
 function Login() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,8 +51,12 @@ function Login() {
     setLoading(true);
 
     try {
+      const apiUrl =
+        import.meta.env.VITE_API_URL ||
+        "http://localhost:3000/api";
+
       const response = await fetch(
-        "http://localhost:3000/api/auth/login",
+        `${apiUrl}/auth/login`,
         {
           method: "POST",
           headers: {
@@ -66,8 +69,7 @@ function Login() {
         },
       );
 
-      const data: LoginResponse =
-        await response.json();
+      const data: LoginResponse = await response.json();
 
       if (
         !response.ok ||
@@ -152,9 +154,7 @@ function Login() {
           <button
             type="button"
             className="login-notification-close"
-            onClick={() =>
-              setNotification(null)
-            }
+            onClick={() => setNotification(null)}
           >
             ×
           </button>
@@ -253,9 +253,7 @@ function Login() {
                 <input
                   id="password"
                   type={
-                    showPassword
-                      ? "text"
-                      : "password"
+                    showPassword ? "text" : "password"
                   }
                   placeholder="••••••••"
                   value={password}
@@ -313,13 +311,9 @@ function Login() {
           </form>
 
           <div className="login-footer">
-            <span>
-              Sistema de Inventario
-            </span>
+            <span>Sistema de Inventario</span>
 
-            <span>
-              © 2026
-            </span>
+            <span>© 2026</span>
           </div>
         </div>
       </section>

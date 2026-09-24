@@ -46,7 +46,9 @@ interface ProductoForm {
   precio: string;
 }
 
-const API_URL = "http://localhost:3000";
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
 
 function Productos() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -132,7 +134,7 @@ function Productos() {
       const query = parametros.toString();
 
       const response = await fetch(
-        `${API_URL}/api/productos${
+        `${API_URL}/productos${
           query ? `?${query}` : ""
         }`,
         {
@@ -182,7 +184,7 @@ function Productos() {
       if (!token) return;
 
       const response = await fetch(
-        `${API_URL}/api/productos/categorias`,
+        `${API_URL}/productos/categorias`,
         {
           method: "GET",
           headers: {
@@ -255,7 +257,7 @@ function Productos() {
       }
 
       const response = await fetch(
-        `${API_URL}/api/productos/${producto.id}`,
+        `${API_URL}/productos/${producto.id}`,
         {
           method: "GET",
           headers: {
@@ -366,8 +368,8 @@ function Productos() {
 
       const url =
         modoFormulario === "crear"
-          ? `${API_URL}/api/productos`
-          : `${API_URL}/api/productos/${productoEditando}`;
+          ? `${API_URL}/productos`
+          : `${API_URL}/productos/${productoEditando}`;
 
       const method =
         modoFormulario === "crear"
@@ -439,7 +441,7 @@ function Productos() {
       }
 
       const response = await fetch(
-        `${API_URL}/api/productos/${producto.id}/estado`,
+        `${API_URL}/productos/${producto.id}/estado`,
         {
           method: "PATCH",
           headers: {
@@ -540,6 +542,7 @@ function Productos() {
 
           <div>
             <span>Total productos</span>
+
             <strong>
               {totalProductos}
             </strong>

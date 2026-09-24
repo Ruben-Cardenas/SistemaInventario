@@ -18,7 +18,9 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import "./Reportes.css";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000/api";
 
 type ReporteTipo =
   | "inventario"
